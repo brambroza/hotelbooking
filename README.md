@@ -22,3 +22,28 @@ npm run dev
 
 ## LIFF
 - ตั้งค่า `VITE_LIFF_ID` เพื่อให้ปุ่ม “เชื่อมต่อ LINE” ทำงานใน mini app
+
+
+ตัวอย่าง 
+
+<p align="center">
+  <img src="images/1.jpg" alt="Demo" width="600" />
+</p>
+ <p align="center">
+  <img src="images/2.jpg" alt="Demo" width="600" />
+</p>
+<p align="center">
+  <img src="images/3.jpg" alt="Demo" width="600" />
+</p>
+<p align="center">
+  <img src="images/4.jpg" alt="Demo" width="600" />
+</p>
+<p align="center">
+  <img src="images/5.jpg" alt="Demo" width="600" />
+</p>
+<p align="center">
+  <img src="images/6.jpg" alt="Demo" width="600" />
+</p>
+<p align="center">
+  <img src="images/7.jpg" alt="Demo" width="600" />
+</p>
