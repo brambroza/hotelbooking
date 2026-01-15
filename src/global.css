@@ -1,0 +1,33 @@
+@import url("https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap");
+
+:root {
+  --pv-ink: #1e2a2f;
+  --pv-sand: #f5f0e6;
+  --pv-sea: #0f6a6b;
+  --pv-sky: #7cc4c6;
+  --pv-amber: #f4b95b;
+  --pv-rose: #e98a7a;
+  --pv-card: #ffffff;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  margin: 0;
+  color: var(--pv-ink);
+  background: radial-gradient(circle at top right, rgba(180, 215, 206, 0.35), transparent 60%),
+    radial-gradient(circle at 10% 20%, rgba(244, 196, 115, 0.2), transparent 55%),
+    #f4f6f8;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: inherit;
+}
