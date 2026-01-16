@@ -16,6 +16,14 @@ npm run dev
 ## Line user
 - ให้เชื่อมต่อ LINE ผ่านปุ่มใน UI (LIFF) เพื่อเก็บ `lineUserId` ใน localStorage
 
+## Payments + Notifications
+- ใช้ Supabase Edge Functions: `create-payment`, `omise-webhook`
+- ตั้งค่า env ใน Supabase Functions: `OMISE_SECRET_KEY`, `LINE_CHANNEL_ACCESS_TOKEN`, `RESEND_API_KEY`, `PUBLIC_WEB_URL`
+
+## Booking email + map
+- ในหน้า Mini App ให้กรอกอีเมลผู้จองเพื่อรับใบยืนยันทางอีเมล
+- ใน Admin Rooms สามารถใส่ลิงก์ Google Maps เพื่อส่งในข้อความยืนยัน
+
 ## Admin
 - ไปที่ `/admin/login`
 - เข้าระบบด้วยอีเมล/พาสเวิร์ด (RPC: `admin_login`)

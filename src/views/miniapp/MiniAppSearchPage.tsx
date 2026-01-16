@@ -42,6 +42,7 @@ export default function MiniAppSearchPage() {
   const [selected, setSelected] = useState<SearchResult | null>(null);
   const [customerName, setCustomerName] = useState("");
   const [customerPhone, setCustomerPhone] = useState("");
+  const [customerEmail, setCustomerEmail] = useState("");
   const [holdResp, setHoldResp] = useState<any>(null);
 
   const [paymentLoading, setPaymentLoading] = useState(false);
@@ -89,6 +90,7 @@ export default function MiniAppSearchPage() {
     setPaymentInfo(null);
     setCustomerName("");
     setCustomerPhone("");
+    setCustomerEmail("");
   };
 
   const onCreateHold = async () => {
@@ -130,6 +132,7 @@ export default function MiniAppSearchPage() {
           line_user_id: lineUserId,
           customer_name: customerName,
           customer_phone: customerPhone,
+          customer_email: customerEmail || null,
           checkin_date: checkin,
           checkout_date: checkout,
           guests_adult: adult,
@@ -159,13 +162,42 @@ export default function MiniAppSearchPage() {
   const onPay = async (payKind: "DEPOSIT" | "FULL") => {
     if (!holdResp?.booking?.id) return;
     setPaymentLoading(true);
-    setPaymentInfo(null);
-    setError("ฟีเจอร์ชำระเงินต้องใช้ Backend หรือ Edge Function");
-    setPaymentLoading(false);
+    try {
+      const lineUserId = storage.getLineUser()?.lineUserId;
+      if (!lineUserId) throw new Error("กรุณาเชื่อมต่อ LINE ก่อนใช้งาน");
+
+      const { data, error } = await supabase.functions.invoke("create-payment", {
+        body: {
+          bookingId: holdResp.booking.id,
+          payKind,
+          lineUserId,
+        },
+      });
+      if (error) throw error;
+      setPaymentInfo(data);
+    } catch (e: any) {
+      setError(e?.message ?? "สร้างรายการชำระเงินไม่สำเร็จ");
+    } finally {
+      setPaymentLoading(false);
+    }
   };
 
   const onPoll = async () => {
-    setPaymentInfo(null);
+    if (!paymentInfo?.paymentId) return;
+    setPaymentLoading(true);
+    try {
+      const { data, error } = await supabase
+        .from("booking_payments")
+        .select("*")
+        .eq("id", paymentInfo.paymentId)
+        .single();
+      if (error) throw error;
+      setPaymentInfo((prev: any) => ({ ...prev, latest: { payment: data } }));
+    } catch (e: any) {
+      setError(e?.message ?? "เช็คสถานะไม่สำเร็จ");
+    } finally {
+      setPaymentLoading(false);
+    }
   };
 
   const onOpenDetail = async (row: SearchResult) => {
@@ -377,6 +409,7 @@ export default function MiniAppSearchPage() {
 
             <TextField label="ชื่อผู้จอง" value={customerName} onChange={(e) => setCustomerName(e.target.value)} fullWidth />
             <TextField label="เบอร์โทร" value={customerPhone} onChange={(e) => setCustomerPhone(e.target.value)} fullWidth />
+            <TextField label="อีเมล (สำหรับส่งใบยืนยัน)" value={customerEmail} onChange={(e) => setCustomerEmail(e.target.value)} fullWidth />
           </Stack>
 
           {holdResp?.booking?.id && (
@@ -384,15 +417,11 @@ export default function MiniAppSearchPage() {
               <Alert severity="success">
                 สร้าง Hold สำเร็จ (หมดอายุ: {holdResp.paymentOptions?.holdExpiresAt})
               </Alert>
-              <Alert severity="warning" sx={{ mt: 2 }}>
-                ระบบชำระเงินออนไลน์ต้องใช้ Backend หรือ Edge Function กรุณาติดต่อเจ้าหน้าที่เพื่อชำระเงิน
-              </Alert>
-
               <Stack direction={{ xs: "column", sm: "row" }} spacing={1} sx={{ mt: 2 }}>
-                <Button variant="outlined" onClick={() => onPay("DEPOSIT")} disabled>
+                <Button variant="outlined" onClick={() => onPay("DEPOSIT")} disabled={paymentLoading}>
                   จ่ายมัดจำ
                 </Button>
-                <Button variant="contained" onClick={() => onPay("FULL")} disabled>
+                <Button variant="contained" onClick={() => onPay("FULL")} disabled={paymentLoading}>
                   จ่ายเต็ม
                 </Button>
               </Stack>
@@ -410,7 +439,7 @@ export default function MiniAppSearchPage() {
                   </Stack>
                   {paymentInfo.latest?.payment?.status && (
                     <Typography variant="body2" color="text.secondary">
-                      Payment status: {paymentInfo.latest.payment.status} / Charge: {paymentInfo.latest.provider?.chargeStatus ?? "-"}
+                      Payment status: {paymentInfo.latest.payment.status}
                     </Typography>
                   )}
                 </Box>

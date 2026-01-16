@@ -32,6 +32,7 @@ type Room = {
   bathrooms: number;
   included_guests: number;
   extra_guest_price: number;
+  map_url?: string | null;
   description: string;
   details: any;
   rating_score: number;
@@ -58,6 +59,7 @@ export default function AdminRoomEditor() {
   const [includedGuests, setIncludedGuests] = useState<number>(2);
   const [extraGuestPrice, setExtraGuestPrice] = useState<number>(0);
   const [description, setDescription] = useState("");
+  const [mapUrl, setMapUrl] = useState("");
   const [detailsJson, setDetailsJson] = useState<string>(JSON.stringify({
     bedrooms: 1,
     bathrooms: 1,
@@ -112,7 +114,8 @@ export default function AdminRoomEditor() {
       setBathrooms(rr.bathrooms ?? 1);
       setIncludedGuests(rr.included_guests ?? 2);
       setExtraGuestPrice(Number(rr.extra_guest_price ?? 0));
-      setDescription(rr.description);
+    setDescription(rr.description);
+    setMapUrl(rr.map_url ?? "");
       setActive(rr.is_active);
       setRatingScore(Number(rr.rating_score ?? 0));
       setRatingNote(rr.rating_note ?? "");
@@ -176,6 +179,7 @@ export default function AdminRoomEditor() {
             bathrooms,
             included_guests: includedGuests,
             extra_guest_price: extraGuestPrice,
+            map_url: mapUrl || null,
             description,
             details,
             rating_score: ratingScore,
@@ -213,6 +217,7 @@ export default function AdminRoomEditor() {
             bathrooms,
             included_guests: includedGuests,
             extra_guest_price: extraGuestPrice,
+            map_url: mapUrl || null,
             description,
             details,
             rating_score: ratingScore,
@@ -303,7 +308,7 @@ export default function AdminRoomEditor() {
             {isNew ? "เพิ่มห้องพัก" : "แก้ไขห้องพัก"}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            เก็บข้อมูลห้องพักแนว Agoda: ราคา/รองรับกี่คน/รูปภาพ 10 รูป/สิ่งอำนวยความสะดวก + รายละเอียดเพิ่มเติม
+            เก็บข้อมูลห้องพัก : ราคา/รองรับกี่คน/รูปภาพ 10 รูป/สิ่งอำนวยความสะดวก + รายละเอียดเพิ่มเติม
           </Typography>
         </Box>
 
@@ -381,6 +386,13 @@ export default function AdminRoomEditor() {
                   multiline
                   minRows={3}
                 />
+                <TextField
+                  label="ลิงก์แผนที่ (Google Maps)"
+                  value={mapUrl}
+                  onChange={(e) => setMapUrl(e.target.value)}
+                  fullWidth
+                  placeholder="https://maps.google.com/..."
+                />
 
                 <Divider />
 
@@ -430,9 +442,7 @@ export default function AdminRoomEditor() {
           <Card sx={{ borderRadius: 3 }}>
             <CardContent>
               <Typography fontWeight={900}>สิ่งอำนวยความสะดวก</Typography>
-              <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
-                เลือกแบบติ๊ก (เหมือน Agoda)
-              </Typography>
+             
 
               <Stack spacing={0.5}>
                 {amenities.map((a) => (
@@ -453,7 +463,7 @@ export default function AdminRoomEditor() {
 
               <Typography fontWeight={900}>รูปภาพห้องพัก (สูงสุด 10 รูป)</Typography>
               <Typography variant="body2" color="text.secondary">
-                แนะนำรูป: 16:9, ความกว้าง 1600px+ จะดูสวยเหมือน Agoda
+                แนะนำรูป: 16:9, ความกว้าง 1600px+  
               </Typography>
 
               <Stack direction="row" alignItems="center" spacing={1} sx={{ mt: 1 }}>

@@ -14,6 +14,8 @@ import AdminRoomEditor from "../views/admin/AdminRoomEditor";
 import AdminPromosPage from "../views/admin/AdminPromosPage";
 import AdminAmenitiesPage from "../views/admin/AdminAmenitiesPage";
 import AdminDashboardPage from "../views/admin/AdminDashboardPage";
+import AdminReportsPage from "../views/admin/AdminReportsPage";
+import AdminHousekeepingPage from "../views/admin/AdminHousekeepingPage";
 import MiniAppLayout from "../layouts/MiniAppLayout";
 
 
@@ -36,6 +38,8 @@ export default function App() {
           <Route path="rooms/new" element={<AdminRoomEditor />} />
           <Route path="rooms/:id" element={<AdminRoomEditor />} />
           <Route path="calendar" element={<AdminCalendarPage />} />
+          <Route path="housekeeping" element={<AdminHousekeepingPage />} />
+          <Route path="reports" element={<AdminReportsPage />} />
           <Route path="promos" element={<AdminPromosPage />} />
           <Route path="amenities" element={<AdminAmenitiesPage />} />
         </Route>

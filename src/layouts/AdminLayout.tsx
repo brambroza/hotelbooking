@@ -14,6 +14,8 @@ import KingBedOutlinedIcon from "@mui/icons-material/KingBedOutlined";
 import LocalOfferOutlinedIcon from "@mui/icons-material/LocalOfferOutlined";
 import SpaOutlinedIcon from "@mui/icons-material/SpaOutlined";
 import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
+import AssessmentOutlinedIcon from "@mui/icons-material/AssessmentOutlined";
+import CleaningServicesOutlinedIcon from "@mui/icons-material/CleaningServicesOutlined";
 import { storage } from "../lib/storage";
 
 export default function AdminLayout() {
@@ -75,6 +77,20 @@ export default function AdminLayout() {
               variant={location.pathname.includes("/admin/calendar") ? "contained" : "text"}
             >
               Calendar
+            </Button>
+            <Button
+              startIcon={<CleaningServicesOutlinedIcon />}
+              onClick={() => nav("/admin/housekeeping")}
+              variant={location.pathname.includes("/admin/housekeeping") ? "contained" : "text"}
+            >
+              Housekeeping
+            </Button>
+            <Button
+              startIcon={<AssessmentOutlinedIcon />}
+              onClick={() => nav("/admin/reports")}
+              variant={location.pathname.includes("/admin/reports") ? "contained" : "text"}
+            >
+              Reports
             </Button>
           </Stack>
 
